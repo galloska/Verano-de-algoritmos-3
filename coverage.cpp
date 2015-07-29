@@ -490,7 +490,7 @@ int main() {
         while(n--){
             scanf("%lf %lf %lf",&a.x,&a.y,&r);
             Circulo c(a,r);
-            if(IntersecCirculoRecta( c , l )==1) continue;
+            if(IntersecCirculoRecta( c , l )>=0) continue;
             Linea s = CuerdaInterseccion( l , c );
             if(s.p<l.p) s.p = l.p;
             if(s.q<l.p) continue;
@@ -502,25 +502,19 @@ int main() {
         Punto fin,ini;
         double res = 0.0;
         bool flag = false;
-        for(int i=0;i<total.size();i++){
-            if(i==0){
-                flag = true;
-                fin = total[i].q;
-                ini = total[i].p;
-            }
-            else if(total[i].p<fin || total[i].p==fin){
+        int i = 0;
+        while(i<total.size()){
+            ini = total[i].p;
+            fin = total[i].q;
+            i++;
+            while(i<total.size() && (total[i].p<fin || total[i].p==fin )){
                 if(fin<total[i].q) fin = total[i].q;
+                i++;
             }
-            else{
-                res += Distancia(fin,ini);
-                fin = total[i].q;
-                ini = total[i].p;
-                flag = true;
-            }
+            res += Distancia(ini,fin);
         }
-        if(total.size()>0 && flag) res += Distancia(ini,fin);
         //printf("%lf %lf\n",res,Distancia(l.p,l.q));
-        printf("%.2lf\n",res / Distancia(l.p,l.q) * 100.0);
+        printf("%.2lf\n",(res / Distancia(l.p,l.q) ) * 100.0 + ERROR);
     }
     return 0;
 }
