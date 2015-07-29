@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
 // Definiciones iniciales
@@ -128,10 +127,10 @@ struct Linea {
         }
     }
 
+    // ¡Peligro! Ordena por ecuacion de recta
     bool operator<(const Linea& cmp) const {
-        if (!Igual(a, cmp.a)) return a < cmp.a;
-        if (!Igual(b, cmp.b)) return b < cmp.b;
-        return Igual(c, cmp.c)? false: c < cmp.c;
+        if( !(p==cmp.p) ) return p<cmp.p;
+		return q < cmp.q;
     }
 };
 
@@ -443,7 +442,7 @@ Linea ProyTangentes(const Punto& p, const Circulo& c) {
     double d = Distancia(p, c.c);
     double a = asin(sqrt(d*d - c.r*c.r) / d);
     Punto p_ = Trasladar(c.c, ProyPuntoCircunferencia(p, c));
-    return Linea(Trasladar(Opuesto(c.c), Rotar(p_, M_PI * 2 - a)),
+    return Linea(Trasladar(Opuesto(c.c), Rotar(p_, M_2PI - a)),
                  Trasladar(Opuesto(c.c), Rotar(p_, a)));
 }
 
@@ -470,9 +469,9 @@ Linea CuerdaInterseccion(const Linea& r, const Circulo& c) {
     }
     else {
         double sq = sqrt(c.r*c.r -
-            pow(r.p.x - c.c.y, 2));
-        p = Punto(r.p.x, c.c.x + sq);
-        q = Punto(r.p.x, c.c.x - sq);
+            pow(r.p.x - c.c.x, 2));
+        p = Punto(r.p.x, c.c.y + sq);
+        q = Punto(r.p.x, c.c.y - sq);
     }
     return Linea(p, q);
 }
@@ -513,8 +512,7 @@ int main() {
             }
             res += Distancia(ini,fin);
         }
-        //printf("%lf %lf\n",res,Distancia(l.p,l.q));
-        printf("%.2lf\n",(res / Distancia(l.p,l.q) ) * 100.0 + ERROR);
+        printf("%.2lf\n",(res / Distancia(l.p,l.q) ) * 100.0);
     }
     return 0;
 }
